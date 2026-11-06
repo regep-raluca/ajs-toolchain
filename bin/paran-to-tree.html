@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tree Parentheses Visualizer<</title>
+	<script>
+
+		function parse(parens) {
+			var stack = [];
+			var root = [];
+			var current = root;
+			var item = "";
+			for (let ch of parens) {
+				if (ch === ' ' || ch === '\t' || ch === '\r' || ch == '\n') {
+					if (item.length != 0) { current.push(item); item = ""; }
+				}
+				else if (ch === '(') {
+					stack.push(current);
+					current = [];
+				}
+				else if (ch === ')') {
+					if (item.length != 0) { current.push(item); item = ""; }
+					if (stack.length == 0) throw new Error("too many )");
+					parent = stack.pop();
+					parent.push(current);
+					current = parent;
+				}
+				else item += ch;
+			}
+			if (stack.length != 0) throw new Error("too many (");
+			return current;
+		}
+
+
+		function toHTML0(vec) {
+			if (typeof vec === 'string') {
+				return "<li>" + vec + "</li>";
+			} else if (Array.isArray(vec)) {
+				let s = "<li>";
+				if (vec.length == 0) {
+					s += "()";
+				} else {
+					if (Array.isArray(vec[0])) {
+						s += toHTML0(vec[0]);
+					} else {
+						s += vec[0];
+					}
+					s += "<ul>";
+					for (let i = 1; i < vec.length; i++) {
+						s += toHTML0(vec[i]);
+					}
+					s += "</ul>";
+				}
+				s += "</li>";
+				return s;
+			} else {
+				throw new Error("Invalid tree node");
+			}
+		}
+
+		function toHTML(vec) {
+			let s = "";
+			for (let i in vec) {
+				s += toHTML0(vec[i]);
+			}
+			return s;
+		}
+
+		function show() {
+			try {
+				let input = document.getElementById("input").value;
+				let tree = parse(input);
+				//console.log(tree);
+				document.getElementById("tree").innerHTML = toHTML(tree);
+			} catch (e) {
+				alert("Error: " + e.message);
+			}
+		}
+	</script>
+</head>
+<body>
+	<ul id="tree"></ul>
+	<textarea id="input" rows="10" cols="50"></textarea>
+	<br/>
+	<button onclick="show()">Show</button>
+</body>
+</html>

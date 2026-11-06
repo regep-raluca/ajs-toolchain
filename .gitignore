@@ -1,0 +1,29 @@
+# Visual Studio cache and settings
+.vs/
+*.user
+*.suo
+launch.vs.json
+
+# Build and CMake output
+out/
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+
+# Compiled Binaries & Libraries
+*.exe
+*.obj
+*.o
+*.pdb
+*.ilk
+*.tlog
+*.idb
+*.dll
+*.lib
+*.so
+*.a
+
+# Generated temp files
+out.c
+averages.txt
